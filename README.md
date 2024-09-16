@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
@@ -83,3 +84,15 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+=======
+- 👋 Hi, I’m @aasencio1
+- 👀 I’m interested in developer code
+- 🌱 I’m currently learning nestjs framework  
+- 💞️ I’m looking to collaborate on proyects relate it with nest, modeling, uml 2, xUML, fUML. 
+- 📫 How to reach me asdrubal.asencio@gmail.com
+
+<!---
+aasencio1/aasencio1 is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+You can click the Preview link to take a look at your changes.
+--->
+>>>>>>> 1b8fccf6422429f82e12c47a0b2d12c62f40d010
