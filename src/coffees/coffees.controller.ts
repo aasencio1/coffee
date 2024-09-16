@@ -18,15 +18,13 @@ findALL(@Query() paginationQuery){
 
 @Get(':id')
  findOne (@Param('id') id: number){   // if we changes string to number, validationPipe make convert String to number
-    console.log(typeof id); 
+    console.log(typeof id);   // Primt what is the current data type on run execution. 
     return this.coffeesService.findOne('' + id);
  }
 
-
-
 @Post()
 create (@Body() createCoffeDto: CreateCoffeeDto){  //reemplazar body por createCoffeeDto
-    console.log (createCoffeDto instanceof CreateCoffeeDto);
+    //console.log (createCoffeDto instanceof CreateCoffeeDto);
     return this.coffeesService.create(createCoffeDto);
 }
 

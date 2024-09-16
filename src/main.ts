@@ -10,7 +10,7 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,    //power of DTO and validation's pipe  , avoid passing invalid properties
-      transform: true,
+      transform: true,   // Whe is enble, transfor to the instance that we are especting
       forbidNonWhitelisted: true  //Whiltelist is relate with all the feature previously listed and defined in the DTO. 
     })
   );
