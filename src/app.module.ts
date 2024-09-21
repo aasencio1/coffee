@@ -17,7 +17,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
        password: 'pass123',
        database: 'postgres',
        autoLoadEntities: true,
-       synchronize: true,   // desable in production
+       synchronize: true,   // desable in production , esto debido que al ejecutar reconstruye la base de datos
+                            /*
+                             TypeORM compara las entidades de tu código con las tablas en la base de datos y,
+                             si detecta diferencias, las ajusta automáticamente (crea o modifica tablas, columnas, índices, etc.).
+                             */ 
+                             /*
+                             En producción, es más seguro utilizar migraciones para aplicar cambios controlados en la base de datos.
+                             */
     })  ],
   controllers: [AppController],
   providers: [AppService],

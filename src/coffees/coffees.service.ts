@@ -16,7 +16,7 @@ export class CoffeesService {
      private readonly coffeeRepository: Repository <Coffee>,
      @InjectRepository(Flavor)
      private readonly flavorRepository: Repository <Flavor>,
-     private readonly dataSource: DataSource, 
+     private readonly dataSource: DataSource,   //los datos registrado en en Objeto de configuracion forRoot en NestJs, se utilizan para configurar el DataSource en TypeORM
   ){}
 
 /*-private coffees = [
@@ -142,7 +142,7 @@ async update(id: string, updateCoffeeDto: UpdateCoffeeDto){  //antes any ...
 
         await queryRunner.manager.save(coffee);
         await queryRunner.manager.save(recommendEvent);
-        
+
 
         await queryRunner.commitTransaction();
   } catch(err) {

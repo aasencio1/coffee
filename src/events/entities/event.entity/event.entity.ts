@@ -1,15 +1,19 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, Index, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { IndexMetadata } from "typeorm/metadata/IndexMetadata";
 
-
+@Index(['name','type'])  //Indice compuesto 
+                        //@Index(['name', 'type'], { unique: true }) - Este índice es único
 @Entity()
 
 export class Event{
+  @PrimaryGeneratedColumn()  
   @PrimaryColumn()
   id: number;
 
   @Column()
   type: string;
   
+  @Index()
   @Column()
   name: string;
 

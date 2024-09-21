@@ -9,7 +9,10 @@ export class Coffee
     id: number;
 
     @Column()
-    name: string;
+    name: string;   //after titlebefore called name, al modificar el nombre se elimina toda la data existente previamente en la DB. ie elimina la columna y agrega una nueva.
+
+    @Column({ nullable: true})
+    description: string;  
 
     @Column()
     brand: string;
