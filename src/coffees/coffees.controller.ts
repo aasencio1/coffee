@@ -3,22 +3,24 @@ import { CoffeesService } from './coffees.service';
 import { response } from 'express';
 import { CreateCoffeeDto } from './dto/create-coffee.dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto/update-coffee.dto';
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto/pagination-query.dto';
 
 @Controller('coffees')
 export class CoffeesController {
     constructor (private readonly coffeesService: CoffeesService){}
-@Get()
+
 // @HttpCode(HttpStatus.FORBIDDEN)
-findALL(@Query() paginationQuery){
+@Get()
+findALL(@Query() paginationQuery: PaginationQueryDto){
       //  const { limit, offset} = paginationQuery;
     //return `Esta funcion retorna todos los cafes. Limit: ${limit}, offset: ${offset}`; //http://localhost:3000/coffees?limit=20&offset=10 (query parameters)
-     return this.coffeesService.findAll(); 
+     return this.coffeesService.findAll(paginationQuery); 
     //return "primer get a pulmon";
 }
 
 @Get(':id')
  findOne (@Param('id') id: number){   // if we changes string to number, validationPipe make convert String to number
-    console.log(typeof id);   // Primt what is the current data type on run execution. 
+    console.log(typeof id);   // Print what is the current data type on run execution. 
     return this.coffeesService.findOne('' + id);
  }
 
