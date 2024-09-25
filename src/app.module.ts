@@ -5,6 +5,7 @@ import { CoffeesController } from './coffees/coffees.controller';
 import { CoffeesService } from './coffees/coffees.service';
 import { CoffeesModule } from './coffees/coffees.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
 
 @Module({
   imports: [
@@ -25,7 +26,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
                              /*
                              En producción, es más seguro utilizar migraciones para aplicar cambios controlados en la base de datos.
                              */
-    })  ],
+    }), CoffeeRatingModule  ],
   controllers: [AppController],
   providers: [AppService],
 })
