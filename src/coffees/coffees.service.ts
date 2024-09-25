@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Coffee } from './entities/coffee.entity';
 import { DataSource, Repository } from 'typeorm';
@@ -7,6 +7,7 @@ import { UpdateCoffeeDto } from './dto/update-coffee.dto/update-coffee.dto';
 import { Flavor } from './entities/flavor.entity/flavor';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto/pagination-query.dto';
 import { Event } from 'src/events/entities/event.entity/event.entity';
+import { COFFEE_BRANDS } from './coffees.constants';
 
 @Injectable()
 export class CoffeesService {
@@ -16,8 +17,15 @@ export class CoffeesService {
      private readonly coffeeRepository: Repository <Coffee>,
      @InjectRepository(Flavor)
      private readonly flavorRepository: Repository <Flavor>,
-     private readonly dataSource: DataSource,   //los datos registrado en en Objeto de configuracion forRoot en NestJs, se utilizan para configurar el DataSource en TypeORM
-  ){}
+     private readonly dataSource: DataSource,   // usada en type orm 0.3.x . los datos registrado en en Objeto de configuracion forRoot en NestJs, se utilizan para configurar el DataSource en TypeORM
+     // private readonly connection: Connection,  //usada en type orm 0.2.x
+   //  @Inject ('COFFEE_BRANDS') coffeeBrands: string[],  //Inyectas valores o instancias que no son clases, como constantes o configuraciones.
+    @Inject (COFFEE_BRANDS) coffeeBrands: string[], //El decorador @Inject() es necesario cuando el token no se puede inferir automáticamente 
+    //por el tipo de clase, lo que ocurre cuando usamos tokens personalizados como strings.
+  ){
+    console.log(coffeeBrands);  // se imprime los los valores [ 'buddy brew', 'nescafe' ]
+
+  }
 
 /*-private coffees = [
    {
