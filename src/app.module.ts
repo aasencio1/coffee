@@ -8,10 +8,23 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
+import * as Joi from '@hapi/joi';
 
 @Module({
   imports: [
-    ConfigModule.forRoot (),
+    ConfigModule.forRoot ({
+       validationSchema: Joi.object(
+        {  // Input Variable to the System environment
+          DATABASE_HOST: Joi.required(),
+          DATABASE_PORT: Joi.number().default(5432),
+        })
+      
+      /*{ 
+            .envFilePath: '.environment',  //to spcify antother path option //is looking for a .environment file 
+      //or
+      ignoreEnvFile:true,  //in that case, it will ignore env file entirely
+      }*/
+   }),
     CoffeesModule, 
     TypeOrmModule.forRoot({
        type: 'postgres',
@@ -20,6 +33,14 @@ import { ConfigModule } from '@nestjs/config';
        username: process.env.DATABASE_USER,
        password: process.env.DATABASE_PASSWORD,
        database: process.env.DATABASE_NAME,
+
+        /*host: process.env.DATABASE_HOST,
+       port: +process.env.DATABASE_PORT,
+       username: process.env.DATABASE_USER,
+       password: process.env.DATABASE_PASSWORD,
+       database: process.env.DATABASE_NAME,*/
+
+
        autoLoadEntities: true,
        synchronize: true,   // desable in production , esto debido que al ejecutar reconstruye la base de datos
                             /*
