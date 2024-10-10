@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Coffee } from './entities/coffee.entity';
 import { DataSource, Repository } from 'typeorm';
@@ -9,8 +9,18 @@ import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto/paginati
 import { Event } from 'src/events/entities/event.entity/event.entity';
 import { COFFEE_BRANDS } from './coffees.constants';
 
-@Injectable()
-export class CoffeesService {
+/*  // inyectar la clave generada en un servicio como lo harías normalmente.
+  export class ApiService {
+     constructor(@Inject('API_KEY') private readonly apiKey: string) {}
+
+  getApiKey(): string {
+    return this.apiKey;
+  }
+*/
+// Scope: DEFAULT, TRANSIENT, REQUEST
+
+@Injectable( {scope: Scope.REQUEST } )   //Scope.DEFAULT is used to the most cases.
+export class CoffeesService {     //esto es una clase provider 
 
   constructor(
      @InjectRepository(Coffee)
@@ -20,11 +30,12 @@ export class CoffeesService {
      private readonly dataSource: DataSource,   // usada en type orm 0.3.x . los datos registrado en en Objeto de configuracion forRoot en NestJs, se utilizan para configurar el DataSource en TypeORM
      // private readonly connection: Connection,  //usada en type orm 0.2.x
    //  @Inject ('COFFEE_BRANDS') coffeeBrands: string[],  //Inyectas valores o instancias que no son clases, como constantes o configuraciones.
-    @Inject (COFFEE_BRANDS) coffeeBrands: string[], //El decorador @Inject() es necesario cuando el token no se puede inferir automáticamente 
+    @Inject (COFFEE_BRANDS) coffeeBrands: string[], //El decorador @Inject() es necesario cuando el token no se puede inferir automáticamente  (el token es equivalente al nombre del repositorio que se estab inyectando)
+    
     //por el tipo de clase, lo que ocurre cuando usamos tokens personalizados como strings.
   ){
-    console.log(coffeeBrands);  // se imprime los los valores [ 'buddy brew', 'nescafe' ]
-
+    //console.log(coffeeBrands);  // se imprime los los valores [ 'buddy brew', 'nescafe' ]
+    console.log('PASSED - Coffee Services Instanciated');
   }
 
 /*-private coffees = [
