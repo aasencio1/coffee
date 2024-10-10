@@ -11,6 +11,7 @@ export class CoffeesController {
     constructor (
       private readonly coffeesService: CoffeesService,
       @Inject(REQUEST) private readonly request: Request,
+     // En resumen, esta línea inyecta el objeto de solicitud HTTP actual (Request) en el controlador, permitiéndote acceder a detalles de la solicitud dentro de las funciones del controlador, como headers, body, parámetros, etc. Esto es útil para manejar datos específicos del cliente o la solicitud en curso.
     )
     {
         console.log('CoffeesController created');
