@@ -7,6 +7,8 @@ import { Flavor } from './entities/flavor.entity/flavor';
 import { Event } from 'src/events/entities/event.entity/event.entity';
 import { COFFEE_BRANDS } from './coffees.constants';
 import { Connection, DataSource } from 'typeorm';
+import { ConfigModule } from '@nestjs/config';
+import coffeesConfig from './config/coffees.config';
 
 //Rule: By Default, All Modules encapsulate their providers. 
 //Rule: If you want ti be Public API of the Module, use word "exports".
@@ -14,7 +16,12 @@ import { Connection, DataSource } from 'typeorm';
 //class MockCoffeeService {}
  
 @Module({  
-         imports: [TypeOrmModule.forFeature([Coffee, Flavor, Event])],  // Configurar Entidades especificas dentro de un modulo 
+         imports: [
+                   TypeOrmModule.forFeature([Coffee, Flavor, Event]), 
+                   ConfigModule.forFeature(coffeesConfig)    //create the env file close to the domain.
+                  ], 
+                   // Configurar Entidades especificas dentro de un modulo 
+                   //ConfigModule.forFeature(coffeesConfig) is called as "PARTIAL Registration"
          controllers: [CoffeesController],
          /*providers: [  // Ejemplo de un Provider usando USECLASS
             {

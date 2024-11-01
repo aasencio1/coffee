@@ -8,6 +8,8 @@ import { Flavor } from './entities/flavor.entity/flavor';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto/pagination-query.dto';
 import { Event } from 'src/events/entities/event.entity/event.entity';
 import { COFFEE_BRANDS } from './coffees.constants';
+import { ConfigService, ConfigType } from '@nestjs/config';
+import coffeesConfig from './config/coffees.config';
 
 /*  // inyectar la clave generada en un servicio como lo harías normalmente.
   export class ApiService {
@@ -19,7 +21,7 @@ import { COFFEE_BRANDS } from './coffees.constants';
 */
 // Scope: DEFAULT, TRANSIENT, REQUEST
 
-@Injectable( {scope: Scope.REQUEST } )   //Scope.DEFAULT is used to the most cases.
+@Injectable( {scope: Scope.DEFAULT} )   //Scope.DEFAULT is used to the most cases. Scope.REQUEST
 export class CoffeesService {     //esto es una clase provider 
 
   constructor(
@@ -28,13 +30,22 @@ export class CoffeesService {     //esto es una clase provider
      @InjectRepository(Flavor)
      private readonly flavorRepository: Repository <Flavor>,
      private readonly dataSource: DataSource,   // usada en type orm 0.3.x . los datos registrado en en Objeto de configuracion forRoot en NestJs, se utilizan para configurar el DataSource en TypeORM
+     @Inject(coffeesConfig.KEY)
+     private readonly coffeesConfiguration: ConfigType<typeof coffeesConfig>,   //ConfigType es un HelperType 
+     private readonly configService : ConfigService,
      // private readonly connection: Connection,  //usada en type orm 0.2.x
    //  @Inject ('COFFEE_BRANDS') coffeeBrands: string[],  //Inyectas valores o instancias que no son clases, como constantes o configuraciones.
     @Inject (COFFEE_BRANDS) coffeeBrands: string[], //El decorador @Inject() es necesario cuando el token no se puede inferir automáticamente  (el token es equivalente al nombre del repositorio que se estab inyectando)
-    
+   
     //por el tipo de clase, lo que ocurre cuando usamos tokens personalizados como strings.
   ){
+   // const databaseHost = this.configService.get<string>('DATABASE_HOST','localhost');  
+    const databaseHost = this.configService.get('database.host','localhost');
+    //const coffeesConfig = this.configService.get('coffees.foo');   //passing the partial name registrated
+    //console.log(coffeesConfig);
+    console.log(databaseHost);
     //console.log(coffeeBrands);  // se imprime los los valores [ 'buddy brew', 'nescafe' ]
+    console.log(coffeesConfiguration.foo);  //access the object directly instead of using the get method; you can specific properties of the partial config using dot (.) notation 
     console.log('PASSED - Coffee Services Instanciated');
   }
 

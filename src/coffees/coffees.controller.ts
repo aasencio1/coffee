@@ -1,12 +1,27 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Inject, Param, Patch, Post, Query, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Inject, Param, Patch, Post, Query, Res, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CoffeesService } from './coffees.service';
 import { response } from 'express';
 import { CreateCoffeeDto } from './dto/create-coffee.dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto/update-coffee.dto';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto/pagination-query.dto';
 import { REQUEST } from '@nestjs/core';
+import { ValidationError } from 'class-validator';
+
+//This applies ti the Controller
+//@UsePipes(new ValidationPipe())   //This is super useful when you want to pass in a specific configuration object to the ValidationObject
+                                  // It's a best practice to use classes instead instance  (this reduces memory)
+/*
+Validation Pipe
+SCOPE - Control the flow, content, validation on anything in our Application
+Global at Module
+Controller - At the begin of the Controller
+Method
+Parameter  
+*/      
 
 @Controller('coffees')
+
+
 export class CoffeesController {
     constructor (
       private readonly coffeesService: CoffeesService,
@@ -18,6 +33,10 @@ export class CoffeesController {
     }
 
 // @HttpCode(HttpStatus.FORBIDDEN)
+@UsePipes(ValidationPipe)   //This is super useful when you want to pass in a specific configuration object to the ValidationObject
+                                  // It's a best practice to use classes instead instance  (this reduces memory)
+// This single setup only apply to this single  fillAll() route handler (operation)
+@UsePipes(ValidationPipe)  // use validationPipe for a local context 
 @Get()
 findALL(@Query() paginationQuery: PaginationQueryDto){
       //  const { limit, offset} = paginationQuery;
@@ -39,8 +58,10 @@ create (@Body() createCoffeDto: CreateCoffeeDto){  //reemplazar body por createC
 }
 
 @Patch(':id')
-update (@Param ('id') id: string, @Body() updateCoffeeDto : UpdateCoffeeDto){      
-      return this.coffeesService.update(id, updateCoffeeDto);
+//PARAM scope using ValidationPipe to an specific parameter
+//update (@Param ('id') id: string, @Body() updateCoffeeDto : UpdateCoffeeDto){      
+  update (@Param ('id') id: string, @Body(ValidationPipe) updateCoffeeDto : UpdateCoffeeDto){      
+  return this.coffeesService.update(id, updateCoffeeDto);
     //return `retorna a pulmon el patch "${id} CAFES` ;
 }
 @Delete(':id') 
