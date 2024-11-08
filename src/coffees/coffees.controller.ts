@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Inject, Param, Patch, Post, Query, Res, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Inject, Param, Patch, Post, Query, Res, SetMetadata, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CoffeesService } from './coffees.service';
 import { response } from 'express';
 import { CreateCoffeeDto } from './dto/create-coffee.dto/create-coffee.dto';
@@ -6,6 +6,7 @@ import { UpdateCoffeeDto } from './dto/update-coffee.dto/update-coffee.dto';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto/pagination-query.dto';
 import { REQUEST } from '@nestjs/core';
 import { ValidationError } from 'class-validator';
+import { Public } from 'src/decorators/public.decorator';
 
 //This applies ti the Controller
 //@UsePipes(new ValidationPipe())   //This is super useful when you want to pass in a specific configuration object to the ValidationObject
@@ -36,9 +37,12 @@ export class CoffeesController {
 @UsePipes(ValidationPipe)   //This is super useful when you want to pass in a specific configuration object to the ValidationObject
                                   // It's a best practice to use classes instead instance  (this reduces memory)
 // This single setup only apply to this single  fillAll() route handler (operation)
-@UsePipes(ValidationPipe)  // use validationPipe for a local context 
+//@UsePipes(ValidationPipe)  // use validationPipe for a local context 
+//@SetMetadata('isPublic', true)
+@Public() // access to a decorator previosly created at /decorators folder   New Decortaor create by myself
 @Get()
-findALL(@Query() paginationQuery: PaginationQueryDto){
+async findALL(@Query() paginationQuery: PaginationQueryDto){
+     await new Promise (resolve => setTimeout(resolve,5000));
       //  const { limit, offset} = paginationQuery;
     //return `Esta funcion retorna todos los cafes. Limit: ${limit}, offset: ${offset}`; //http://localhost:3000/coffees?limit=20&offset=10 (query parameters)
      return this.coffeesService.findAll(paginationQuery); 
