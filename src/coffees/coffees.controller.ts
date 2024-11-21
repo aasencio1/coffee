@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Inject, Param, Patch, Post, Query, Res, SetMetadata, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Inject, Param, ParseIntPipe, Patch, Post, Query, Res, SetMetadata, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CoffeesService } from './coffees.service';
 import { response } from 'express';
 import { CreateCoffeeDto } from './dto/create-coffee.dto/create-coffee.dto';
@@ -7,6 +7,7 @@ import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto/paginati
 import { REQUEST } from '@nestjs/core';
 import { ValidationError } from 'class-validator';
 import { Public } from 'src/decorators/public.decorator';
+import { Protocol } from 'src/common/decorators/protocol.decorator';
 
 //This applies ti the Controller
 //@UsePipes(new ValidationPipe())   //This is super useful when you want to pass in a specific configuration object to the ValidationObject
@@ -41,7 +42,11 @@ export class CoffeesController {
 //@SetMetadata('isPublic', true)
 @Public() // access to a decorator previosly created at /decorators folder   New Decortaor create by myself
 @Get()
-async findALL(@Query() paginationQuery: PaginationQueryDto){
+async findALL(
+    @Protocol('https') protocol: string, 
+    @Query() paginationQuery: PaginationQueryDto){
+  // Agregar el Decorador protocol , invoa al decorador, y se eimprime en el ejemplo http. 
+     console.log(protocol);
      await new Promise (resolve => setTimeout(resolve,5000));
       //  const { limit, offset} = paginationQuery;
     //return `Esta funcion retorna todos los cafes. Limit: ${limit}, offset: ${offset}`; //http://localhost:3000/coffees?limit=20&offset=10 (query parameters)
@@ -50,8 +55,11 @@ async findALL(@Query() paginationQuery: PaginationQueryDto){
 }
 
 @Get(':id')
- findOne (@Param('id') id: number){   // if we changes string to number, validationPipe make convert String to number
-    console.log(typeof id);   // Print what is the current data type on run execution. 
+ findOne (@Param('id', ParseIntPipe) id: number){   // if we changes string to number, validationPipe make convert String to number
+    //console.log(typeof id);   // Print what is the current data type on run execution. 
+    //console.log(`the current value is "${id}" .`);
+    console.log(id);// Si `id` no es un número, ParseIntPipe lanzará una excepción y este bloque no se ejecutará.
+    
     return this.coffeesService.findOne('' + id);
  }
 

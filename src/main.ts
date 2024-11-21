@@ -9,7 +9,7 @@ import { TimeoutInterceptor } from './common/interceptors/timeout/timeout.interc
 
 // bootstrap es el inicio del programa
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { logger: ['log', 'error', 'warn', 'debug'] });
   // Based on SOLID PRINCIPLES
   // aplicar como buena practica los axiomas de la teoria de sistemas
   // Building Blocks
@@ -20,14 +20,19 @@ async function bootstrap() {
      // 4- Extend basic behaviour // 5- complete overwrite methods (axiom 3)// Inspired on Aspect Oriented Progreamming Techinique 
   
   // , guards for ACLs,app.useGlobalPipes(      // Option to set up a pipe directly from sinide a Nest Module
+  app.useGlobalPipes
+  
+  (
     new ValidationPipe({    // we can not inject any dependency here. 
-      whitelist: true,    //power of DTO and validation's pipe  , avoid passing invalid properties
-      transform: true,   // Whe is enble, transfor to the instance that we are especting
-      forbidNonWhitelisted: true,  //Whiltelist is relate with all the feature previously listed and defined in the DTO. 
-      transformOptions:{
+        whitelist: true,    //power of DTO and validation's pipe  , avoid passing invalid properties
+        transform: true,   // Whe is enble, transfor to the instance that we are especting
+        forbidNonWhitelisted: true,  //Whiltelist is relate with all the feature previously listed and defined in the DTO. 
+        transformOptions:{
         enableImplicitConversion: true 
       }
     })
+  )  
+ 
   //);
   
 
@@ -36,12 +41,11 @@ async function bootstrap() {
   // app.useGlobalGuards(new ApiKeyGuard());  // it was change return value to false - everythinh is deny (forbidden)
   // Is similar to the module define in common.module.ts 
      // It was commeted when it was created a new module called common 
- // app.useGlobalFilters(new HttpExceptionFilter());
-  app.useGlobalInterceptors
-  (
-     new WrapResponseInterceptor(), 
+  app.useGlobalFilters(new HttpExceptionFilter());
+  /*app.useGlobalInterceptors(
+    new WrapResponseInterceptor(), 
      new TimeoutInterceptor()
-  );
+    );*/
   await app.listen(3000);
 }
 bootstrap();
