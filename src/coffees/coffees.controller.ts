@@ -8,6 +8,7 @@ import { REQUEST } from '@nestjs/core';
 import { ValidationError } from 'class-validator';
 import { Public } from 'src/decorators/public.decorator';
 import { Protocol } from 'src/common/decorators/protocol.decorator';
+import { ApiForbiddenResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 //This applies ti the Controller
 //@UsePipes(new ValidationPipe())   //This is super useful when you want to pass in a specific configuration object to the ValidationObject
@@ -21,6 +22,7 @@ Method
 Parameter  
 */      
 
+@ApiTags('coffees')
 @Controller('coffees')
 
 
@@ -40,6 +42,9 @@ export class CoffeesController {
 // This single setup only apply to this single  fillAll() route handler (operation)
 //@UsePipes(ValidationPipe)  // use validationPipe for a local context 
 //@SetMetadata('isPublic', true)
+
+//@ApiForbiddenResponse ({ description: 'Forbidden.'})
+@ApiResponse({ status: 403, description: 'Forbidden.' })
 @Public() // access to a decorator previosly created at /decorators folder   New Decortaor create by myself
 @Get()
 async findALL(
