@@ -15,7 +15,7 @@ import { CommonModule } from './common/common.module';
 
 
 @Module({
-      // Define validation for input to envirotnment file.
+      // Define validation for input to environment file.
        /*ConfigModule.forRoot ({
        validationSchema: Joi.object(
         {  // Input Variable to the System environment
