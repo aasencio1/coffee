@@ -48,11 +48,11 @@ export class CoffeesController {
 @Public() // access to a decorator previosly created at /decorators folder   New Decortaor create by myself
 @Get()
 async findALL(
-    @Protocol('https') protocol: string, 
+  //  @Protocol('https') protocol: string, 
     @Query() paginationQuery: PaginationQueryDto){
   // Agregar el Decorador protocol , invoa al decorador, y se eimprime en el ejemplo http. 
-     console.log(protocol);
-     await new Promise (resolve => setTimeout(resolve,5000));
+//     console.log(protocol);
+    // await new Promise (resolve => setTimeout(resolve,5000));
       //  const { limit, offset} = paginationQuery;
     //return `Esta funcion retorna todos los cafes. Limit: ${limit}, offset: ${offset}`; //http://localhost:3000/coffees?limit=20&offset=10 (query parameters)
      return this.coffeesService.findAll(paginationQuery); 
@@ -61,8 +61,9 @@ async findALL(
 
 @Get(':id')
  findOne (@Param('id', ParseIntPipe) id: number){   // if we changes string to number, validationPipe make convert String to number
+ //findOne (id: number){
     //console.log(typeof id);   // Print what is the current data type on run execution. 
-    //console.log(`the current value is "${id}" .`);
+    console.log(`the current value is "${id}" .`);
     console.log(id);// Si `id` no es un número, ParseIntPipe lanzará una excepción y este bloque no se ejecutará.
     
     return this.coffeesService.findOne('' + id);
@@ -81,11 +82,15 @@ create (@Body() createCoffeDto: CreateCoffeeDto){  //reemplazar body por createC
   return this.coffeesService.update(id, updateCoffeeDto);
     //return `retorna a pulmon el patch "${id} CAFES` ;
 }
-@Delete(':id') 
+/*@Delete(':id') 
  remove(@Param('id') id: string){
     return this.coffeesService.remove(id);
     // return 'return el elemento eliminado a pulmon';
+ }*/
+ @Delete(':id')
+ async remove(@Param('id') id: string) {
+   await this.coffeesService.remove(id); // Ejecuta la lógica de negocio
+   return { message: 'Coffee deleted successfully' }; // Devuelve el mensaje
  }
-
 
 }
