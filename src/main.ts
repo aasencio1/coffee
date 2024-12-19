@@ -1,60 +1,23 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { Options, ValidationPipe } from '@nestjs/common';
-import { HttpExceptionFilter } from './common/filters/http-exception/http-exception.filter';
-import { ApiKeyGuard } from './common/guards/api-key/api-key.guard';
-import { WrapResponseInterceptor } from './common/interceptors/wrap-response/wrap-response.interceptor';
-import { TimeoutInterceptor } from './common/interceptors/timeout/timeout.interceptor';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
 
-
-// bootstrap es el inicio del programa
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { logger: ['log', 'error', 'warn', 'debug'] });
-  // Based on SOLID PRINCIPLES
-  // aplicar como buena practica los axiomas de la teoria de sistemas
-  // Building Blocks
-  // A- Exception FIlter - handling exception that may unhandle (Axiom 1)
-  // B - PIPES - Transformation- (Axioma 3) and  validations input (Axioma 4)
-  // C- Guards - A given request need certain conditions (authentication, authorization, rol, acl ) (axioma 4)
-  // D- Interceptor - interceptor for 1- adding code before or after method execution; 2-  Trasnsform the result; 3- Transfor the exception thrown a method;  
-     // 4- Extend basic behaviour // 5- complete overwrite methods (axiom 3)// Inspired on Aspect Oriented Progreamming Techinique 
-  
-  // , guards for ACLs,app.useGlobalPipes(      // Option to set up a pipe directly from sinide a Nest Module
-  app.useGlobalPipes
-  
-  (
-    new ValidationPipe({    // we can not inject any dependency here. 
-        whitelist: true,    //power of DTO and validation's pipe  , avoid passing invalid properties
-        transform: true,   // Whe is enble, transfor to the instance that we are especting
-        forbidNonWhitelisted: true,  //Whiltelist is relate with all the feature previously listed and defined in the DTO. 
-        transformOptions:{
-        enableImplicitConversion: true 
-      }
-    })
-  )  
- 
-  //);
-  
-
-  // Apply ApiKeyGuard globally
-
-  // app.useGlobalGuards(new ApiKeyGuard());  // it was change return value to false - everythinh is deny (forbidden)
-  // Is similar to the module define in common.module.ts 
-     // It was commeted when it was created a new module called common 
-  app.useGlobalFilters(new HttpExceptionFilter());
-  /*app.useGlobalInterceptors(
-    new WrapResponseInterceptor(), 
-     new TimeoutInterceptor()
-    );*/
-  const options = new DocumentBuilder()
-   .setTitle('Iluvcoffee')
-   .setDescription('Coffee aplication')
-   .setVersion('1.0')
-   .build();
-  const document = SwaggerModule.createDocument(app, options) 
-  SwaggerModule.setup('api',app, document)
-
-  await app.listen(3000);
+  const app = await NestFactory.create(AppModule);
+// Apply the ValidationPipe globally in our main.ts file
+ app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,   // Al indicarlo, se indica que en el cuerpo del post se puede pasar cualquier parametro, lo cual puede ser peligroso
+    forbidNonWhitelisted: true,  //al indicarlo, se expresa que solo se aceptan como lista blanca los parametros que estan definido en el DTO
+                                 //y cualquier otro parametro o propiedad sera Rechazada y no llegara al COntroller
+    transform: true,   // Activando este parametro, y haciendo un Post y creando una instancia de CerateCoffeeDTO. se observa que cambioa de Falso a Verdad
+                       // Esto indica que se puede tranasforma el DTO en UNA INSTANIA DE CLASE y Poder manejarlo facilmente 
+                      // Como devesntaja de habilitar que el DTO sea una instancia es q se afecte el rendimiento y todos los controladores y servicios depenada de la instancia del DTO
+ }));  // Indicar usar los Pipes significa que se usar las validaciones de la Clase Validadora
+                          // ValidationPipe usa Internamente class-validator 
+                          // Es parte de las abstracciones AL PROGRAMADOR para que asuma que eso funciona y aumente la eficiencia del desarollo (y la dependencia)
+                          //Si no se usa los pipes, no se puede usar class-validator, es decir es OBVIADO-
+                          // De no usar se debe implementar estas validaciones. 
+    
+  await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
