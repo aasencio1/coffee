@@ -1,0 +1,43 @@
+@startuml
+
+class "Sistema de Archivos" as BaseDeDatos <<Base de Datos>> {
+    - nombre : String
+    - tamañoTotal : Integer
+}
+
+class Modelo <<Modelo>> {
+    - validar() : void
+    - guardar() : void
+    - buscar() : void
+}
+
+class Directorio <<Colección>> {
+    - nombre : String
+    - númeroDocumentos : Integer
+}
+
+class Archivo <<Documento>> {
+    - contenido : String
+    - fechaCreación : Date
+}
+
+class TipoDeArchivo <<Esquema>> {
+    - nombre : String
+    - definición : String
+}
+
+class Fragmento <<Shard>> {
+    - nodo : String
+    - fragmentoID : String
+    - claveDivisión : String
+}
+
+BaseDeDatos "1" --> "1..*" Directorio : Contiene
+Directorio "1" o-- "0..*" Archivo : Contiene
+Directorio "1" o-- "0..*" Fragmento : Divide
+Archivo "1" --> "1" TipoDeArchivo : Apunta a
+Fragmento "1" o-- "0..*" Archivo : Contiene
+
+BaseDeDatos <|.. Modelo : «realization»
+
+@enduml
