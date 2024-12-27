@@ -1,6 +1,7 @@
 import { PartialType } from "@nestjs/mapped-types";
 import { CreateCoffeeDto } from "../create-coffee.dto/create-coffee.dto";
 
+
 export class UpdateCoffeeDto extends PartialType(CreateCoffeeDto) {   //La Clase Hija Hereda las Propiedades de la Clase Clase Padre, asignadola a todas sus propiedades Opcional
     //usando @nestjs/mapped-type se elimina el codigo repetido de la Clase create-coffee.dto
 

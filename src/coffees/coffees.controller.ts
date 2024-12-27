@@ -1,8 +1,10 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Put, Query, Res } from '@nestjs/common';
 //import { response } from 'express';
 import { CoffeesService } from './coffees.service';
-import { CreateCoffeeDto } from './dto/create-coffee.dto/create-coffee.dto';
+
 import { UpdateCoffeeDto } from './dto/update-coffee.dto/update-coffee.dto';
+import { CreateCoffeeDto } from './dto/create-coffee.dto/create-coffee.dto';
+
 
 @Controller('coffees')
 export class CoffeesController {
@@ -17,10 +19,10 @@ findAll(@Query() paginationQuery) { //@Res() response es un metodod e Express //
 }
 @Get(':id')
   //findOne(@Param ('id') id: string) {   //Todo query PARAMETER By Default es String
-    findOne(@Param ('id') id: number) {
+    findOne(@Param ('id') id: string) {  //Calls to mongodb are string, not numbers.
     //return `This action returns #${id} coffee`;
     console.log(typeof id);
-    return this.coffeesService.findOne(''+id);
+    return this.coffeesService.findOne(id);
 }
   @Post()
  // @HttpCode()  // formatea estaticamente el codigo de respuesta HttpStatus.GONE
