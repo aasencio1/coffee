@@ -12,7 +12,11 @@ async function bootstrap() {
     transform: true,   // Activando este parametro, y haciendo un Post y creando una instancia de CerateCoffeeDTO. se observa que cambioa de Falso a Verdad
                        // Esto indica que se puede tranasforma el DTO en UNA INSTANIA DE CLASE y Poder manejarlo facilmente 
                       // Como devesntaja de habilitar que el DTO sea una instancia es q se afecte el rendimiento y todos los controladores y servicios depenada de la instancia del DTO
- }));  // Indicar usar los Pipes significa que se usar las validaciones de la Clase Validadora
+    transformOptions:{      enableImplicitConversion: true,  
+         // Si esto se habilita, la conversion de tipos (String a Numerico) es automatica.
+    },
+  }),
+);  // Indicar usar los Pipes significa que se usar las validaciones de la Clase Validadora
                           // ValidationPipe usa Internamente class-validator 
                           // Es parte de las abstracciones AL PROGRAMADOR para que asuma que eso funciona y aumente la eficiencia del desarollo (y la dependencia)
                           //Si no se usa los pipes, no se puede usar class-validator, es decir es OBVIADO-

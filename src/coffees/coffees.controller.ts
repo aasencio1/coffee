@@ -4,6 +4,7 @@ import { CoffeesService } from './coffees.service';
 
 import { UpdateCoffeeDto } from './dto/update-coffee.dto/update-coffee.dto';
 import { CreateCoffeeDto } from './dto/create-coffee.dto/create-coffee.dto';
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto/pagination-query.dto';
 
 
 @Controller('coffees')
@@ -11,11 +12,11 @@ export class CoffeesController {
     constructor(private readonly coffeesService: CoffeesService){}
 
 @Get ()
-findAll(@Query() paginationQuery) { //@Res() response es un metodod e Express //@Query es para pasar parametros de busqueda  por el get 
+findAll(@Query() paginationQuery: PaginationQueryDto) { //@Res() response es un metodod e Express //@Query es para pasar parametros de busqueda  por el get 
   //response.status(200).send('This action returns all coffees');  // No es una buena practica usar directamente express
    // const { limit, offset } = paginationQuery;
     //return `This action returns all coffees. Limit ${limit}, offset: ${offset}`;  //limit: cuantos retorna, offser: cuales omito  
-    return this.coffeesService.findAll();
+    return this.coffeesService.findAll(paginationQuery);
 }
 @Get(':id')
   //findOne(@Param ('id') id: string) {   //Todo query PARAMETER By Default es String

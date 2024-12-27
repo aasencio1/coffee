@@ -11,7 +11,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     CoffeesModule,
     MongooseModule.forRoot('mongodb://localhost:27017/nest-course'),
   ],
-  controllers: [AppController],  // Se ELIMINA el CoffeesController del Modulo prinicipal y se define dentro del Modulo a usar.
+  controllers: [AppController],  // Se ELIMINA el CoffeesController del Modulo principal y se define dentro del Modulo a usar.
   providers: [AppService], // Se ELIMINA el CoffeesService del Modulo prinicipal y se define dentro del Modulo a usar.
 })
 export class AppModule {}
