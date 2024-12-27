@@ -1,15 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
+import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto/update-coffee.dto';
 import { CreateCoffeeDto } from './dto/create-coffee.dto/create-coffee.dto';
 import { Coffee } from './entities/coffee.entity';
-import { Model } from 'mongoose';
+import { Connection, Model } from 'mongoose';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto/pagination-query.dto';
 
 @Injectable()
 export class CoffeesService {
   constructor(
     @InjectModel(Coffee.name) private readonly coffeeModel: Model <Coffee>,
+    //Se agrega los decordadores para la gestion de la transaccion
+    @InjectConnection() private readonly connection: Connection,
+    @InjectModel(Event.name) private readonly eventModel: Model<Event>,
   ) {}
 
   findAll(paginationQuery: PaginationQueryDto) {
@@ -46,4 +49,18 @@ export class CoffeesService {
     return this.coffeeModel.deleteOne({ _id: coffee._id }).exec();
   }
   
+  // Metodo para implementar el uso de transaccion en MongoDB
+  async recommendCoffee(coffee: Coffee){
+    const session = await this.connection.startSession();
+    session.startTransaction();
+    try{
+      coffee.recommendations ++;
+      await session.commitTransaction();
+
+    } catch (err){
+      await session.abortTransaction();
+    } finally {
+      session.endSession();
+    }
+  }
 }

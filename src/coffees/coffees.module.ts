@@ -4,6 +4,7 @@ import { CoffeesService } from './coffees.service';
 import { Mongoose } from 'mongoose';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Coffee, CoffeeSchema } from './entities/coffee.entity';
+import { EventSchema } from 'src/events/entities/event.entity/event.entity';
 
 @Module({
     imports: [
@@ -11,10 +12,14 @@ import { Coffee, CoffeeSchema } from './entities/coffee.entity';
             {
                 name: Coffee.name,
                 schema: CoffeeSchema,
+            },
+            {
+                name: Event.name,
+                schema: EventSchema,
             }
         ])
     ],
     controllers: [CoffeesController],  //Se define los Controladores del Modulo -- Uso de los Principios SOLID
-    providers: [CoffeesService]   // Se Define los Conbtroladorreews del Modulo -- Uso de los Principios SOLID
+    providers: [CoffeesService]   // Se Define los Servicios del Modulo -- Uso de los Principios SOLID
 })
 export class CoffeesModule {}
